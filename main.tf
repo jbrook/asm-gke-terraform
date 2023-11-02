@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# CHECKME: Do we need all of these? Do we need others?
-
 resource "google_project_service" "container_api" {
   service = "container.googleapis.com"
 
@@ -33,7 +31,7 @@ resource "google_project_service" "mesh_api" {
   disable_dependent_services = true
 }
 
-# [START gke_ap_asm_tutorial_create_cluster]
+# [START asm_gke_create_cluster]
 
 terraform {
   required_version = "~> 1.3"
@@ -59,10 +57,9 @@ variable "cluster_name" {
   default     = "asm-demo-cluster"
 }
 
-# CHECKME
-#data "google_project" "project" {
-#  depends_on = [google_project_service.cloudresourcemanager_api]
-#}
+data "google_project" "project" {
+  depends_on = [google_project_service.cloudresourcemanager_api]
+}
 
 resource "google_container_cluster" "cluster" {
   name     = var.cluster_name
@@ -75,9 +72,9 @@ resource "google_container_cluster" "cluster" {
   resource_labels = { mesh_id = "proj-${data.google_project.project.number}" }
 }
 
-# [END gke_ap_asm_tutorial_create_cluster]
+# [END asm_gke_create_cluster]
 
-# [START gke_ap_asm_configure_asm_fleet]
+# [START asm_gke_configure_asm_fleet]
 
 resource "google_gke_hub_membership" "membership" {
   membership_id = google_container_cluster.cluster.name
@@ -106,4 +103,4 @@ resource "google_gke_hub_feature_membership" "service_mesh_for_membership" {
   }
 }
 
-# [END gke_ap_asm_configure_asm_fleet]
+# [END asm_gke_configure_asm_fleet]
