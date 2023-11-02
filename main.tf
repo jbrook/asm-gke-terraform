@@ -72,10 +72,7 @@ resource "google_container_cluster" "cluster" {
   # Enable Autopilot for this cluster
   enable_autopilot = true
 
-  # CHECKME: Do we need the resource manager API to get the project number?
-  #  resource_labels = { mesh_id = "proj-${data.google_project.project.number}" }
-
-  #  ip_allocation_policy {}
+  resource_labels = { mesh_id = "proj-${data.google_project.project.number}" }
 }
 
 # [END gke_ap_asm_tutorial_create_cluster]
